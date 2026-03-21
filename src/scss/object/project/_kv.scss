@@ -1,0 +1,21 @@
+@use "../../global" as g;
+
+.p-kv {
+  background-image: url("/assets/images/kv.webp");
+  background-size: cover;
+  background-position: center;
+  padding: 240px 20px;
+  text-align: center;
+
+  &__title {
+    font-size: 64px;
+    margin-bottom: 16px;
+    color: g.$c-white;
+    line-height: 1;
+  }
+
+  &__text {
+    font-weight: 600;
+    color: g.$c-white;
+  }
+}
