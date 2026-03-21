@@ -1,5 +1,6 @@
+import { API_KEY } from './config.js';
+
 const API_URL = "https://8vuyfkgugj.microcms.io/api/v1/news";
-const API_KEY = "Sf2eEr7xvFuODPHoCJEQTkc7DuZLi0kRUz76";
 
 // 共通：言語判定
 const lang = location.pathname.includes("/en") ? "en" : "ja";
