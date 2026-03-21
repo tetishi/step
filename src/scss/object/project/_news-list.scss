@@ -10,15 +10,10 @@
     &__title {
         font-size: 2.5rem;
         font-weight: bold;
-        // text-align: center;
         margin-bottom: 40px;
-        // font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     }
 
     &__list {
-        // list-style: none;
-        // padding: 0;
-
         li {
             border-bottom: 1px solid g.$c-border;
 
@@ -27,14 +22,6 @@
                 align-items: baseline;
                 gap: 20px;
                 padding: 20px;
-                // text-decoration: none;
-                // color: g.$c-black;
-                // transition: opacity 0.3s;
-
-                // &:hover {
-                //     opacity: 0.7;
-                // }
-
                 time {
                     font-size: 0.9rem;
                     color: g.$c-time;
@@ -54,11 +41,4 @@
         display: inline-block;
         margin-top: 30px;
     }
-
-    // // 記事がない時のメッセージ用（JSで追加したクラス）
-    // &__empty {
-    //     // text-align: center;
-    //     padding: 20px 0;
-    //     color: #999;
-    // }
 }
