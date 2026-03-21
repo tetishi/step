@@ -29,7 +29,7 @@ async function renderNews() {
   // 1. 記事が1件もない場合の処理
   if (news.length === 0) {
     const message = lang === "ja" ? "お知らせはありません。" : "No news available.";
-    list.innerHTML = `<li class="p-news__empty">${message}</li>`;
+    list.innerHTML = `<li class="c-empty">${message}</li>`;
     return;
   }
 
