@@ -1,5 +1,4 @@
-@use "foundation/reset";
-@use "foundation/base";
-
-@use "layout/header";
-@use "layout/footer";
+@use "global";
+@use "foundation";
+@use "layout";
+@use "object";

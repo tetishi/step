@@ -1,0 +1,11 @@
+// ブレイクポイント
+$breakpoints: (
+  'md': 768px,
+);
+
+// ミックスイン
+@mixin mq($size) {
+  @media screen and (min-width: map-get($breakpoints, $size)) {
+    @content;
+  }
+} 

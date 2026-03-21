@@ -1,0 +1,29 @@
+@use "../global" as g;
+
+.l-header {
+  background: g.$c-white;
+  color: g.$c-black;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  &__logo {
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 20px;
+    a {
+      color: g.$c-black;
+    }
+  }
+}

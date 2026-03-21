@@ -1,0 +1,9 @@
+@use "../global" as g;
+
+.l-footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 14px;
+  color: g.$c-white;
+  background-color: g.$c-black;
+}
