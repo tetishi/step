@@ -1,0 +1,28 @@
+@use "../../global" as g;
+
+.p-article {
+
+  // &__inner {
+  //   max-width: 800px;
+  //   margin: 0 auto;
+  // }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  time {
+    display: block;
+    // margin-bottom: 16px;
+    color: g.$c-time;
+  }
+
+  &__thumbnail {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    margin-bottom: 20px;
+    margin-inline: auto;
+  }
+}

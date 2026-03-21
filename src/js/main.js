@@ -13,10 +13,16 @@ async function fetchNews() {
 }
 
 async function fetchDetail(id) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    headers: { "X-MICROCMS-API-KEY": API_KEY },
-  });
-  return await res.json();
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      headers: { "X-MICROCMS-API-KEY": API_KEY },
+    });
+    if (!res.ok) throw new Error('Failed to fetch detail');
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching detail:', error);
+    return null;
+  }
 }
 
 // --- 一覧表示 ---
@@ -67,6 +73,7 @@ async function renderDetail() {
   const titleElem = document.getElementById("news-title");
   const bodyElem = document.getElementById("news-body");
   const dateElem = document.getElementById("news-date");
+  const thumbnailElem = document.getElementById("news-thumbnail");
   
   // 必須要素がない場合は実行しない
   if (!titleElem || !bodyElem) return;
@@ -75,17 +82,124 @@ async function renderDetail() {
   if (!id) return;
 
   const data = await fetchDetail(id);
+  if (!data) {
+    // エラー表示
+    titleElem.textContent = lang === "ja" ? "記事が見つかりません" : "Article not found";
+    return;
+  }
 
   // 日付の整形
   const pubDate = new Date(data.publishedAt);
   const displayDate = pubDate.toLocaleDateString('ja-JP').replace(/\//g, '.');
   const isoDate = pubDate.toISOString().split('T')[0];
 
-  // 画面に反映（タイトル・本文は多言語対応）
+  // 多言語対応のタイトルと本文
+  const title = lang === "ja" ? data.title_ja : data.title_en;
+  const body = lang === "ja" ? data.body_ja : data.body_en;
+
+  // 画面に反映
   dateElem.textContent = displayDate;
   dateElem.setAttribute("datetime", isoDate);
-  titleElem.textContent = lang === "ja" ? data.title_ja : data.title_en;
-  bodyElem.innerHTML = lang === "ja" ? data.body_ja : data.body_en;
+  titleElem.textContent = title;
+  bodyElem.innerHTML = body;
+
+  // サムネイル表示
+  if (thumbnailElem && data.thumbnail) {
+    thumbnailElem.src = data.thumbnail.url;
+    thumbnailElem.alt = title;
+    thumbnailElem.width = data.thumbnail.width;
+    thumbnailElem.height = data.thumbnail.height;
+
+    // Preload thumbnail for better performance
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = data.thumbnail.url;
+    document.head.appendChild(link);
+  } else if (thumbnailElem) {
+    thumbnailElem.style.display = 'none';
+  }
+
+  // SEO対策
+  updateMetaTags(data, title, body, pubDate);
+}
+
+function updateMetaTags(data, title, body, pubDate) {
+  const currentUrl = window.location.href;
+  const description = body.replace(/<[^>]*>/g, '').substring(0, 150) + '...'; // HTMLタグ除去して150文字
+  const imageUrl = data.thumbnail ? data.thumbnail.url : '';
+
+  // Title
+  document.title = `${title} | STEP`;
+
+  // Description
+  setMetaTag('name', 'description', description);
+
+  // Open Graph
+  setMetaTag('property', 'og:title', title);
+  setMetaTag('property', 'og:description', description);
+  setMetaTag('property', 'og:image', imageUrl);
+  setMetaTag('property', 'og:url', currentUrl);
+  setMetaTag('property', 'og:type', 'article');
+  setMetaTag('property', 'article:published_time', pubDate.toISOString());
+  setMetaTag('property', 'article:modified_time', data.updatedAt);
+
+  // Twitter Card
+  setMetaTag('name', 'twitter:card', 'summary_large_image');
+  setMetaTag('name', 'twitter:title', title);
+  setMetaTag('name', 'twitter:description', description);
+  setMetaTag('name', 'twitter:image', imageUrl);
+
+  // Canonical
+  setLinkTag('rel', 'canonical', currentUrl);
+
+  // Structured Data (JSON-LD)
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": title,
+    "description": description,
+    "image": imageUrl ? [imageUrl] : [],
+    "datePublished": pubDate.toISOString(),
+    "dateModified": data.updatedAt,
+    "author": {
+      "@type": "Organization",
+      "name": "STEP"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "STEP"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": currentUrl
+    }
+  };
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.text = JSON.stringify(structuredData);
+  document.head.appendChild(script);
+}
+
+function setMetaTag(attr, value, content) {
+  let meta = document.querySelector(`meta[${attr}="${value}"]`);
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute(attr, value);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', content);
+}
+
+function setLinkTag(attr, value, href) {
+  let link = document.querySelector(`link[${attr}="${value}"]`);
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute(attr, value);
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', href);
 }
 
 // 実行

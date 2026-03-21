@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -18,23 +18,26 @@
             <a href="/en/" class="l-header__logo">STEP</a>
             <nav class="l-header__nav">
                 <a href="/en/news/">News</a>
-                <a href="/ja/index.html">日本語</a>
+                <a href="/ja/detail.html">日本語</a>
             </nav>
         </div>
     </header>
 
-    <main>
-        <article class="p-news-detail">
-            <div class="p-news-detail__inner">
-                <time id="news-date" class="p-news-detail__date"></time>
-                <h1 id="news-title" class="p-news-detail__title"></h1>
-                <div id="news-body" class="p-news-detail__body"></div>
-
-                <div class="p-news-detail__btn">
+    <main class="l-main">
+        <section class="p-news-list">
+            <div class="p-news-list__inner">
+                <p class="p-news-list__title">News</p>
+                <article class="p-article">
+                    <time id="news-date" class="p-article__date"></time>
+                    <h1 id="news-title" class="p-article__title"></h1>
+                    <img id="news-thumbnail" class="p-article__thumbnail" alt="" loading="lazy">
+                    <div id="news-body" class="p-article__body"></div>
+                </article>
+                <div class="p-news-list__btn">
                     <a href="/en/news/" class="c-btn">Back to List</a>
                 </div>
             </div>
-        </article>
+        </section>
     </main>
 
     <footer class="l-footer">

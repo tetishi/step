@@ -1,3 +1,4 @@
-@use "kv";
-@use "news";
-@use "news-list";
+@forward "kv";
+@forward "news";
+@forward "news-list";
+@forward "article";
