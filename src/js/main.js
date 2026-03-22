@@ -1,4 +1,4 @@
-import { API_KEY } from './config.js';
+import { API_KEY } from '/assets/js/config.js';
 
 const API_URL = "https://8vuyfkgugj.microcms.io/api/v1/news";
 
