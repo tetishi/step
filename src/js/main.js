@@ -1,5 +1,4 @@
-import { API_KEY } from '/assets/js/config.js';
-
+const API_KEY = "Sf2eEr7xvFuODPHoCJEQTkc7DuZLi0kRUz76";
 const API_URL = "https://8vuyfkgugj.microcms.io/api/v1/news";
 
 // 共通：言語判定
