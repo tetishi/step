@@ -2,7 +2,7 @@ node_modules/
 
 # APIキーなどが書かれたファイル。GitHubに公開しないために.gitignoreに追加。
 .env
-src/js/config.js
+# src/js/config.js
 
 # --- OS・エディタ固有のキャッシュ ---
 .DS_Store
