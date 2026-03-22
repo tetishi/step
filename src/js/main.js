@@ -119,8 +119,7 @@ async function renderDetail() {
     } else if (!hasTitle && !hasBody) {
       // 両方空：準備中メッセージ
       title = "English content is currently under preparation.";
-      body = `<p>We apologize for the inconvenience. The English version of this article is currently being prepared.<br>
-              Please check back later or view the <a class="c-link" href="/ja/news/detail.html?id=${data.id}">Japanese version</a>.</p>`;
+      body = `<p>We apologize for the inconvenience. The English version of this article is currently being prepared.<br>Please check back later or view the <a class="c-link" href="/ja/news/detail.html?id=${data.id}">Japanese version</a>.</p>`;
     } else {
       // 片方だけ入力がある場合（運用ミスなどのフォールバック）
       title = hasTitle ? data.title_en : "English Title: Under Preparation";
