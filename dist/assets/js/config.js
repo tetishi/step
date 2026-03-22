@@ -1,1 +1,1 @@
-let API_KEY="Sf2eEr7xvFuODPHoCJEQTkc7DuZLi0kRUz76";export{API_KEY};
+export const API_KEY="Sf2eEr7xvFuODPHoCJEQTkc7DuZLi0kRUz76";

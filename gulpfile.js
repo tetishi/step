@@ -3,7 +3,7 @@ import * as akSass from "sass";
 import gulpSass from "gulp-sass";
 import autoprefixer from "gulp-autoprefixer";
 import sourcemaps from "gulp-sourcemaps";
-import uglify from "gulp-uglify";
+import terser from "gulp-terser";
 import browserSync from "browser-sync";
 import webp from "gulp-webp";
 import svgmin from "gulp-svgmin";
@@ -38,7 +38,7 @@ export function html() {
 export function scripts() {
   return gulp.src("src/js/**/*.js")
     .pipe(plumber())
-    .pipe(uglify())
+    .pipe(terser())
     .pipe(gulp.dest("dist/assets/js"));
 }
 
