@@ -3,11 +3,22 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ニュース詳細 | STEP</title>
 
+    <meta name="description" content="STEPの最新ニュース詳細ページです。">
+
     <!-- SEO（多言語） -->
-    <link rel="alternate" hreflang="ja" href="/ja/">
-    <link rel="alternate" hreflang="en" href="/en/">
+    <link rel="alternate" hreflang="ja" href="https://step.pages.dev/ja/news/">
+    <link rel="alternate" hreflang="en" href="https://step.pages.dev/en/news/">
+
+    <meta property="og:site_name" content="STEP">
+    <meta property="og:title" content="ニュース詳細 | STEP">
+    <meta property="og:description" content="STEPの最新ニュースをお届けします。">
+    <meta property="og:url" content="https://step.pages.dev/ja/news/detail.html">
+    <meta property="og:image" content="https://step.pages.dev/assets/images/kv.webp">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="ja_JP">
 
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
@@ -18,7 +29,7 @@
             <a href="/ja/" class="l-header__logo">STEP</a>
             <nav class="l-header__nav">
                 <a href="/ja/news/">News</a>
-                <a href="/en/detail.html">ENGLISH</a>
+                <a href="/en/news/detail.html" class="js-lang">ENGLISH</a>
             </nav>
         </div>
     </header>
@@ -28,13 +39,10 @@
             <div class="p-news-list__inner">
                 <p class="p-news-list__title">News</p>
                 <article class="p-article">
-                    <!-- <div class="p-article__inner"> -->
                     <time id="news-date" class="p-article__date"></time>
                     <h1 id="news-title" class="p-article__title"></h1>
                     <img id="news-thumbnail" class="p-article__thumbnail" alt="" loading="lazy">
-                    <div id="news-body" class="p-article__body"></div>
-
-                    <!-- </div> -->
+                    <p id="news-body" class="p-article__body"></p>
                 </article>
                 <div class="p-news-list__btn">
                     <a href="/ja/news/" class="c-btn">一覧に戻る</a>

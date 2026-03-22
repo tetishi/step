@@ -26,37 +26,51 @@ async function fetchDetail(id) {
   }
 }
 
+// 現在のURLからIDを取得 (例: ?id=123)
+const params = new URLSearchParams(window.location.search);
+const newsId = params.get('id');
+
+// 言語切り替えボタンの要素を取得
+const langBtn = document.querySelector('.js-lang');
+
+if (langBtn && newsId) {
+  // 現在の言語(lang)に応じて、反対の言語のURLを生成する
+  // lang が "ja" なら "en" へ、そうでなければ "ja" へ
+  const targetLang = lang === "ja" ? "en" : "ja";
+  
+  langBtn.href = `/${targetLang}/news/detail.html?id=${newsId}`;
+}
+
 // --- 一覧表示 ---
 async function renderNews() {
   const list = document.getElementById("news-list");
-  if (!list) return; // 要素がないページ（詳細ページなど）では何もしない
+  if (!list) return;
 
   const news = await fetchNews();
 
-  // 1. 記事が1件もない場合の処理
   if (news.length === 0) {
     const message = lang === "ja" ? "お知らせはありません。" : "No news available.";
     list.innerHTML = `<li class="c-empty">${message}</li>`;
     return;
   }
 
-  // パスが "/ja/" または "/en/" で終わる、もしくは直後に "index.html" が来る場合のみトップとみなす
   const isTopPage = location.pathname.match(/\/(ja|en)\/(index\.html)?$/);
-
-  // トップページなら5件、それ以外（ニュース一覧ページなど）なら全件
   const displayNews = isTopPage ? news.slice(0, 5) : news;
 
   displayNews.forEach((item) => {
-    // 1. 公開日をオブジェクト化
     const pubDate = new Date(item.publishedAt);
-    
-    // 見た目用（2026.03.21）
     const displayDate = pubDate.toLocaleDateString('ja-JP').replace(/\//g, '.');
-    
-    // 属性用（2026-03-21）
     const isoDate = pubDate.toISOString().split('T')[0];
 
-    const title = lang === "ja" ? item.title_ja : item.title_en;
+    // 一覧でのタイトル判定
+    let title;
+    if (lang === "ja") {
+      title = item.title_ja || "（タイトル未設定）";
+    } else {
+      // 英語ページ：タイトルと本文両方あれば英語、なければ日本語を添える（運用者に気づかせる）
+      const hasEnglish = !!(item.title_en?.trim() && item.body_en?.trim());
+      title = hasEnglish ? item.title_en : `[JP] ${item.title_ja}`;
+    }
 
     const li = document.createElement("li");
     li.innerHTML = `
@@ -76,7 +90,6 @@ async function renderDetail() {
   const dateElem = document.getElementById("news-date");
   const thumbnailElem = document.getElementById("news-thumbnail");
   
-  // 必須要素がない場合は実行しない
   if (!titleElem || !bodyElem) return;
 
   const id = new URLSearchParams(location.search).get("id");
@@ -84,44 +97,55 @@ async function renderDetail() {
 
   const data = await fetchDetail(id);
   if (!data) {
-    // エラー表示
     titleElem.textContent = lang === "ja" ? "記事が見つかりません" : "Article not found";
+    bodyElem.innerHTML = lang === "ja" 
+    ? '<p>お探しの記事は削除されたか、URLが間違っている可能性があります。</p>' 
+    : '<p>The article might have been deleted or the URL is incorrect.</p>';
     return;
   }
 
-  // 日付の整形
+  // ★ 判定ロジック：言語ごとのタイトルと本文の決定
+  let title, body;
+  if (lang === "ja") {
+    title = data.title_ja;
+    body = data.body_ja;
+  } else {
+    const hasTitle = !!data.title_en?.trim();
+    const hasBody = !!data.body_en?.trim();
+
+    if (hasTitle && hasBody) {
+      title = data.title_en;
+      body = data.body_en;
+    } else if (!hasTitle && !hasBody) {
+      // 両方空：準備中メッセージ
+      title = "English content is currently under preparation.";
+      body = `<p>We apologize for the inconvenience. The English version of this article is currently being prepared.<br>
+              Please check back later or view the <a class="c-link" href="/ja/news/detail.html?id=${data.id}">Japanese version</a>.</p>`;
+    } else {
+      // 片方だけ入力がある場合（運用ミスなどのフォールバック）
+      title = hasTitle ? data.title_en : "English Title: Under Preparation";
+      body = hasBody ? data.body_en : `<p>English content is currently under preparation. Please refer to the <a class="c-link" href="/ja/news/detail.html?id=${data.id}">Japanese page</a> for details.</p>`;
+    }
+  }
+
   const pubDate = new Date(data.publishedAt);
   const displayDate = pubDate.toLocaleDateString('ja-JP').replace(/\//g, '.');
   const isoDate = pubDate.toISOString().split('T')[0];
 
-  // 多言語対応のタイトルと本文
-  const title = lang === "ja" ? data.title_ja : data.title_en;
-  const body = lang === "ja" ? data.body_ja : data.body_en;
-
-  // 画面に反映
   dateElem.textContent = displayDate;
   dateElem.setAttribute("datetime", isoDate);
   titleElem.textContent = title;
   bodyElem.innerHTML = body;
 
-  // サムネイル表示
   if (thumbnailElem && data.thumbnail) {
     thumbnailElem.src = data.thumbnail.url;
     thumbnailElem.alt = title;
     thumbnailElem.width = data.thumbnail.width;
     thumbnailElem.height = data.thumbnail.height;
-
-    // Preload thumbnail for better performance
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = data.thumbnail.url;
-    document.head.appendChild(link);
   } else if (thumbnailElem) {
     thumbnailElem.style.display = 'none';
   }
 
-  // SEO対策
   updateMetaTags(data, title, body, pubDate);
 }
 

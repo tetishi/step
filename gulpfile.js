@@ -82,6 +82,12 @@ export function watchFiles() {
   gulp.watch("src/images/**/*.{png,jpg,jpeg,svg}", gulp.series(gulp.parallel(images, svg), reload));
 }
 
+// 書き出し用のタスク
+export const build = gulp.series(
+  clean,
+  gulp.parallel(styles, scripts, html, images, svg)
+);
+
 // デフォルトタスク
 const mainTasks = gulp.parallel(styles, scripts, html, images, svg);
 export default gulp.series(clean, mainTasks, gulp.parallel(serve, watchFiles));

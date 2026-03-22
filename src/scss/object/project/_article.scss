@@ -2,7 +2,7 @@
 
 .p-article {
   h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
     margin-bottom: 16px;
   }
 
@@ -17,5 +17,9 @@
     height: auto;
     margin-bottom: 20px;
     margin-inline: auto;
+  }
+  &__body {
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 }

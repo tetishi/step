@@ -1,0 +1,6 @@
+@use "../../global" as g;
+
+.c-link {
+  color: g.$c-link;
+  text-decoration: underline;
+}
