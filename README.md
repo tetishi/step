@@ -57,8 +57,8 @@
 
 ## システム構成
 
-[ 管理者 ] → (入稿) → [ microCMS ] 
-                           ↓ (API / JSON)
+[ 管理者 ] → (入稿) → [ microCMS ] <br>
+　　　　　　　　　　　　　↓ (API / JSON)<br>
 [ 閲覧者 ] ← (配信) ← [ Cloudflare Pages ] ← (JSによる描画)
 
 ---
@@ -141,6 +141,7 @@
 - dist：本番配信用
 
 Cloudflare Pagesでは dist をデプロイ対象としています。
+
 ---
 
 ## 開発手順
